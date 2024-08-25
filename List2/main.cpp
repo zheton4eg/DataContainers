@@ -100,6 +100,63 @@ public:
 		}
 		size--;
 	}
+	void insert(int Data,int index)
+	{
+		Element* New = new Element(Data);
+		if (index == 0)return push_front(Data);
+		if (size <= index)return push_back(Data);
+	
+		
+		if (index < size/2)
+		{
+			Element* Temp = Head;
+			for (int i = 0; i < index ; i++)Temp = Temp->pNext;
+			New->pNext = Temp;
+			New->pPrev = Temp->pPrev;
+			Temp->pPrev = New;
+			Temp->pPrev->pPrev->pNext = New;
+		}
+		else
+		{
+			Element* Temp = Tail;
+			for (int i = 0; i < (size - index) -1; i++)Temp=Temp->pPrev;
+			New->pNext = Temp;
+			New->pPrev = Temp->pPrev;
+			Temp->pPrev = New;
+			Temp->pPrev->pPrev->pNext = New;
+		}
+		size++;
+	}
+	void erase(int index)
+	{
+		
+		if (index == 0)return pop_front();
+		if (index>size)return pop_back();
+
+		
+		if (index < size / 2)
+		{
+			Element* Temp = Head;
+		
+			for (int i = 0; i < index; i++)Temp = Temp->pNext;
+			Element* erased = Temp;
+			Temp->pNext->pPrev = Temp->pPrev;
+			Temp->pPrev->pNext = Temp->pNext;
+			delete erased;
+		}
+		else
+		{
+			Element* Temp = Tail;
+			
+			for (int i = 0; i < (size - index)-1; i++)Temp=Temp->pPrev;
+			Element* erased = Temp;
+			Temp->pNext->pPrev = Temp->pPrev;
+			Temp->pPrev->pNext = Temp->pNext;
+			delete erased;
+		}
+		size--;
+
+	}
 	//         Methods:
 	void print()const
 	{
@@ -135,11 +192,21 @@ void main()
 	List glist;
 	for (int i = 0; i < n; i++)
 	{
-		//glist.push_front(rand() % 100);
-		glist.push_back(rand() % 100);
+		glist.push_front(rand() % 100);
+		//glist.push_back(rand() % 100);
 	}
 	glist.print();
-	glist.reverse_print();
-	for (int i = 0; i < 100; i++)glist.pop_back();
-	glist.reverse_print();
+	//glist.reverse_print();
+	/*for (int i = 0; i < 100; i++)glist.pop_back();
+	glist.reverse_print();*/
+	int index, Data;
+	cout << "Введите индек элемента: "; cin >> index;
+	cout << "Введите элемент: "; cin >> Data;
+
+	glist.insert(Data, index);
+	glist.print();
+	glist.erase(index);
+	glist.print();
+
+	
 }
