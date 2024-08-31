@@ -2,7 +2,7 @@
 using namespace std;
 #define tab "\t"
 #define delimiter "\n-----------------------------------------------------------------\n"
-//#define BASE_CHECK
+
 class List
 {
 	class Element
@@ -119,7 +119,29 @@ public:
 		}
 
 	};
-	
+	class Iterator :public ConstIterator
+	{
+	public:
+		Iterator(Element* Temp=nullptr):ConstIterator(Temp){}
+		~Iterator(){}
+
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
+	class ReverseIterator :public ConstReverseIterator
+	{
+	public:
+		ReverseIterator(Element* Temp = nullptr) :ConstReverseIterator(Temp) {}
+		~ReverseIterator() {}
+
+		int& operator*()
+		{
+			return Temp->Data;
+		}
+	};
+
 	ConstIterator begin()const
 	{
 		return Head;
@@ -128,14 +150,31 @@ public:
 	{
 		return nullptr;
 	}
-	 ConstReverseIterator rbegin()
+	 ConstReverseIterator rbegin()const
 	{
 		return Tail;
 	}
-	 ConstReverseIterator rend()
+	 ConstReverseIterator rend()const
 	{
 		return nullptr;
 	}
+
+	 Iterator begin()
+	 {
+		 return Head;
+	 }
+	 Iterator end()
+	 {
+		 return nullptr;
+	 }
+	 ReverseIterator rbegin()
+	 {
+		 return Tail;
+	 }
+	 ReverseIterator rend()
+	 {
+		 return nullptr;
+	 }
 
 	List()
 	{
@@ -317,13 +356,14 @@ public:
 		cout << delimiter << endl;
 		cout << "Head: \t" << Head << endl;
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
-		
 			cout << Temp->pPrev << tab << Temp << tab
 				<< Temp->Data << tab << Temp->pNext << endl;
 		cout << "Tail:\t" << Tail << endl;
 		cout << "Кол-во элементов списка: " << size << endl;
 		cout << delimiter << endl;
 	}
+	
+
 	void reverse_print()const
 	{
 		cout << delimiter << endl;
@@ -351,11 +391,20 @@ List operator+(const List& left, const List& right)
 	}
 	return buffer;
 }
+void Grow(List& list)
+{
+	for (List :: Iterator it = list.begin(); it != list.end(); ++it)
+	{
+		*it *= 10;
+	}
+}
 
+//#define BASE_CHECK
 
 void main()
 {
 	setlocale(LC_ALL, "");
+
 #ifdef BASE_CHECK
 	int n;
 	cout << "Введите кол-во элементов списка: "; cin >> n;
@@ -398,6 +447,7 @@ void main()
 	list3.reverse_print();*/
 	for (int i : list)cout << i << tab  ; cout << endl;
 	for (int i : list2)cout << i << tab ; cout << endl;
+	Grow(list3);
 	for (int i : list3)cout << i << tab ; cout << endl;
 
 }
