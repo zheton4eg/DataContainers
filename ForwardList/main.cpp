@@ -4,7 +4,7 @@ using namespace std;
 
 //#define BASE_CHECK
 //#define PERFORMANCE_CHECK
-#define RANGE_BASED_FROM_ARRAY
+//#define RANGE_BASED_FROM_ARRAY
 
 class Element
 {
@@ -26,6 +26,7 @@ public:
 	}
 	friend class ForwardList;
 	friend class Iterator;
+	friend class Stack;
 };
 
 class Iterator
@@ -61,6 +62,7 @@ public:
 unsigned int Element::count = 0;
 class ForwardList
 {
+protected:
 	Element* Head;
 	unsigned int size;
 public: 
@@ -89,7 +91,7 @@ public:
 			push_back(*it);
 		}
 	}
-	ForwardList(const ForwardList& other)
+	ForwardList(const ForwardList& other):ForwardList()
 	{
 		/*for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
 			push_back(Temp->Data);*/
@@ -270,6 +272,54 @@ public:
 	
 };
 
+class Stack:ForwardList
+{
+public:
+	const int& top()const
+	{
+		return Head->Data;
+	}
+	 int& top()
+	{
+		return Head->Data;
+	}
+	int push(int Data)
+	{
+		push_front(Data);
+		return Head->Data;
+	}
+	int pop()
+	{
+		int Data = Head->Data;
+		pop_front();
+		return Data;
+	}
+	int size()const
+	{
+		return ForwardList::size;
+	}
+	bool empty()const
+	{
+		return Head == nullptr;
+	}
+	void swap(Stack& other)
+	{
+		Element* bufferHead = this->Head;
+		this->Head = other.Head;
+		other.Head = this->Head;
+
+		int bufferSize =this->size();
+		this->ForwardList::size = other.size();
+		other.ForwardList::size = bufferSize;
+	}
+	void info()const
+	{
+		cout << this << ":\n";
+		cout << "Size: " << size() << endl;
+		for (int i : ForwardList(*this))cout << i<< tab; cout << endl;
+	}
+};
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -339,12 +389,39 @@ void main()
 #endif // RANGE_BASED_FROM_ARRAY
 
 
-	ForwardList list = { 3, 5, 8, 13, 21 };
-	//list.print();
+	//ForwardList list = { 3, 5, 8, 13, 21 };
+	////list.print();
 
-	for (int i : list)
+	//for (int i : list)
+	//{
+	//	cout << i << tab;
+	//}
+	//cout << endl;
+
+	Stack stack;
+	
+	stack.push(3);
+	stack.push(5);
+	stack.push(8);
+	stack.push(13);
+	stack.push(21);
+	cout << stack.size()<<endl;
+	/*while (!stack.empty())
 	{
-		cout << i << tab;
-	}
-	cout << endl;
+		cout << stack.pop() << tab;
+	}*/
+	Stack stack2;
+	stack2.push(34);
+	stack2.push(55);
+	stack2.push(89);
+	cout << stack2.size() << endl;
+	stack.info();
+	stack2.info();
+
+	stack.swap(stack2);
+	stack.info();
+	stack2.info();
+
+
 }
+ 
